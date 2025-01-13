@@ -5,6 +5,7 @@ import { Tabs, useRouter } from 'expo-router'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getLocalStorage } from '../../service/Storage';
+import Colors from '../../constant/Colors';
 
 export default function TabLayout() {
 
@@ -22,7 +23,12 @@ export default function TabLayout() {
     }
 
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs screenOptions={{ 
+        headerShown: false, 
+        tabBarActiveTintColor: Colors.PRIMARY, // Active tab color
+        // tabBarInactiveTintColor: 'gray', // Inactive tab color 
+        }}
+    >
         <Tabs.Screen name="index" 
         options={{ 
              tabBarLabel: 'Home',

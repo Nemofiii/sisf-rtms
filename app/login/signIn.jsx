@@ -52,7 +52,7 @@ import { setLocalStorage } from '../../service/Storage';
   
     return (
       <Background>
-        <View style={{ alignItems: "center", width: 400 }}>
+        <View style={{ alignItems: "center", width: '100%' }}>
           <Text style={styles.loginText}>Login</Text>
         </View>
         <View style={styles.loginWhite}>
@@ -135,16 +135,16 @@ import { setLocalStorage } from '../../service/Storage';
       color: "white",
       fontSize: 60,
       fontWeight: "bold",
-      marginTop: "30%",
+      marginTop: "35%",
       textAlign: "center",
     },
     loginWhite: {
-      height: 620,
+      height: '100%',
       backgroundColor: "white",
       width: "100%",
       borderTopLeftRadius: 200,
       borderTopRightRadius: 200,
-      marginTop: 40,
+      marginTop: 20,
       paddingTop: 90,
     },
     welcomeText: {

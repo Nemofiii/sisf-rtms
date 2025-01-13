@@ -5,6 +5,7 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../../config/FirebaseConfig'
 import { RemoveLocalStorage } from '../../service/Storage';
 import Header from '../components/Header'
+import SensorList from '../components/SensorList'
 // import EmptyState from '../../components/EmptyState';
 
 export default function HomeScreen() {
@@ -23,7 +24,8 @@ export default function HomeScreen() {
       height: '100%',
     }}>
       <Header/>
-      {/* <EmptyState /> */}
+      <SensorList />
+      
       <Button title='Logout' onPress={() => handleSignOut()}/>
     </View>
   )

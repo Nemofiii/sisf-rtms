@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,7 +16,8 @@ const firebaseConfig = {
   storageBucket: "sisf-rtms-new.firebasestorage.app",
   messagingSenderId: "359258317350",
   appId: "1:359258317350:web:d9ca73b331cb27255bfce7",
-  measurementId: "G-11C5RHWD75"
+  measurementId: "G-11C5RHWD75",
+  databaseURL: "https://sisf-rtms-new-default-rtdb.firebaseio.com/"
 };
 
 // Initialize Firebase
@@ -26,3 +28,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
+
+
+// Initialize Realtime Database and get a reference to the service
+export const database = getDatabase(app);

@@ -62,54 +62,59 @@ import { setLocalStorage } from '../../service/Storage';
 
     return (
       <Background>
-        <View style={{ alignItems: "center", width: 400 }}>
+        <View style={{ alignItems: "center", width: "100%" }}>
           <Text style={styles.registerText}>Register</Text>
-          <Text style={{color: "white", fontSize: 20, fontWeight: "bold"}}>Create a new account</Text>
+          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+            Create a new account
+          </Text>
         </View>
         <View style={styles.loginWhite}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Full Name"
-              onChangeText={(value) => setUserName(value)}
-            />
-          </View>
-          {/* <View style={styles.inputContainer}>
+          <View style={{ marginTop: '20%' }}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Full Name"
+                onChangeText={(value) => setUserName(value)}
+              />
+            </View>
+            {/* <View style={styles.inputContainer}>
             <TextInput
               style={styles.textInput}
               placeholder="Lastname"
             />
           </View> */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Contact"
-              onChangeText={(value) => setContact(value)}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Email"
-              keyboardType={"email-address"}
-              onChangeText={(value) => setEmail(value)}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={(value) => setPassword(value)}
-            />
-          </View>
-          {/* <View style={styles.inputContainer}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Contact"
+                onChangeText={(value) => setContact(value)}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Email"
+                keyboardType={"email-address"}
+                onChangeText={(value) => setEmail(value)}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={(value) => setPassword(value)}
+              />
+            </View>
+            {/* <View style={styles.inputContainer}>
             <TextInput
               style={styles.textInput}
               placeholder="Confirm Password"
               secureTextEntry
             />
           </View> */}
+          </View>
+
           <TouchableOpacity
             style={{
               backgroundColor: "#2F7159",
@@ -133,12 +138,23 @@ import { setLocalStorage } from '../../service/Storage';
               SignUp
             </Text>
           </TouchableOpacity>
-          <View style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-              <Text style={{fontSize: 14, color: "black"}}>Already have an account ? </Text>
-              <TouchableOpacity onPress={() => router.push('login/signIn')}>
-                 <Text style={{color: "#318658", fontWeight: "600", fontSize: 16}}>Login</Text>
-              </TouchableOpacity>
-              
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ fontSize: 14, color: "black" }}>
+              Already have an account ?{" "}
+            </Text>
+            <TouchableOpacity onPress={() => router.push("login/signIn")}>
+              <Text
+                style={{ color: "#318658", fontWeight: "600", fontSize: 16 }}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Background>
@@ -152,10 +168,10 @@ import { setLocalStorage } from '../../service/Storage';
       color: "white",
       fontSize: 60,
       fontWeight: "bold",
-      marginTop: "20%",
+      marginTop: "45%",
     },
     loginWhite: {
-      height: 620,
+      height: '100%',
       backgroundColor: "white",
       width: "100%",
       borderTopLeftRadius: 200,
