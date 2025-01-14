@@ -5,29 +5,34 @@ import { database } from '../../config/FirebaseConfig';
 import Svg, { Circle, Text as SvgText } from 'react-native-svg';
 import Colors from '../../constant/Colors';
 import { TypeList } from '../../constant/Sensors';
-import Recommendation from './Recommendation'; // Import Recommendation component
 
 const SensorList = () => {
-  const [selectedType, setSelectedType] = useState('temperature');
-  const [currentData, setCurrentData] = useState(null);
+  const [selectedType, setSelectedType] = useState('temperature'); // Default to 'temperature'
+  const [currentData, setCurrentData] = useState(null); // Store the most current sensor data
 
+  // Fetch the most current sensor data
   useEffect(() => {
     const fetchData = () => {
-      const sensorsRef = ref(database, 'sensorData');
+      const sensorsRef = ref(database, 'sensorData'); // Accessing the sensorData node
+      // Listen for real-time updates
       onValue(sensorsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
+          // Convert data to an array and sort by timestamp
           const formattedData = Object.values(data).map((item) => ({
             soilMoisture: item.soilMoisture,
             temperature: item.temperature,
             timestamp: item.timestamp,
           }));
+
+          // Find the most recent entry based on the timestamp
           const latestEntry = formattedData.sort(
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
           )[0];
-          setCurrentData(latestEntry);
+
+          setCurrentData(latestEntry); // Set the most current data
         } else {
-          setCurrentData(null);
+          setCurrentData(null); // No data available
         }
       });
     };
@@ -35,20 +40,22 @@ const SensorList = () => {
     fetchData();
   }, []);
 
-  const maxValue = selectedType === 'temperature' ? 50 : 1023;
-  const radius = 70;
-  const strokeWidth = 10;
-  const circumference = 2 * Math.PI * radius;
+  // Max value and progress calculation based on selected type
+  const maxValue = selectedType === 'temperature' ? 50 : 1023; // Max for temperature or moisture
+  const radius = 70; // Circle radius
+  const strokeWidth = 10; // Progress circle thickness
+  const circumference = 2 * Math.PI * radius; // Circle's circumference
   const value =
     currentData !== null
       ? selectedType === 'temperature'
         ? currentData.temperature
         : currentData.soilMoisture
-      : 0;
-  const progress = (value / maxValue) * 100;
+      : 0; // Get the current value
+  const progress = (value / maxValue) * 100; // Progress percentage
 
   return (
     <View style={styles.container}>
+      {/* FlatList for Temperature and Moisture options */}
       <FlatList
         style={styles.typeList}
         horizontal
@@ -65,8 +72,10 @@ const SensorList = () => {
         )}
       />
 
+      {/* Circular Animation for Sensor Data */}
       <View style={styles.circularContainer}>
         <Svg width={200} height={200}>
+          {/* Background Circle */}
           <Circle
             cx="100"
             cy="100"
@@ -75,6 +84,7 @@ const SensorList = () => {
             strokeWidth={strokeWidth}
             fill="none"
           />
+          {/* Progress Circle */}
           <Circle
             cx="100"
             cy="100"
@@ -83,11 +93,12 @@ const SensorList = () => {
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={`${circumference}`}
-            strokeDashoffset={circumference - (circumference * progress) / 100}
+            strokeDashoffset={circumference - (circumference * progress) / 100} // Animate progress
             strokeLinecap="round"
             rotation="-90"
             origin="100, 100"
           />
+          {/* Text Inside the Circle */}
           <SvgText
             x="100"
             y="100"
@@ -103,19 +114,13 @@ const SensorList = () => {
         </Svg>
       </View>
 
+      {/* Timestamp */}
       {currentData && (
         <Text style={styles.timestampText}>Timestamp: {currentData.timestamp}</Text>
       )}
 
+      {/* No data fallback */}
       {currentData === null && <Text style={styles.noDataText}>No data available</Text>}
-
-      {/* Pass data to Recommendation component */}
-      {currentData && (
-        <Recommendation
-          temperature={currentData.temperature}
-          moisture={currentData.soilMoisture}
-        />
-      )}
     </View>
   );
 };

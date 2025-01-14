@@ -26,7 +26,7 @@ export default function HomeScreen() {
       <Header/>
       <SensorList />
       
-      <Button title='Logout' onPress={() => handleSignOut()}/>
+      {/* <Button title='Logout' onPress={() => handleSignOut()}/> */}
     </View>
   )
 }
