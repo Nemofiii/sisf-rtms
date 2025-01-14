@@ -5,44 +5,50 @@ import { database } from '../../config/FirebaseConfig';
 import Svg, { Circle, Text as SvgText } from 'react-native-svg';
 import Colors from '../../constant/Colors';
 import { TypeList } from '../../constant/Sensors';
+import Recommendation from './Recommendation'; // Import Recommendation component
 
 const SensorList = () => {
-  const [selectedType, setSelectedType] = useState('temperature'); // Default to 'temperature'
-  const [sensorData, setSensorData] = useState(null); // Store the sensor data (either temperature or moisture)
+  const [selectedType, setSelectedType] = useState('temperature');
+  const [currentData, setCurrentData] = useState(null);
 
-  // Function to fetch sensor data based on the selected type
   useEffect(() => {
     const fetchData = () => {
-      const sensorsRef = ref(database, 'sensors'); // Accessing the sensors node
-      // Listen for real-time updates
+      const sensorsRef = ref(database, 'sensorData');
       onValue(sensorsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          setSensorData(data[selectedType]); // Set the data based on the selectedType
+          const formattedData = Object.values(data).map((item) => ({
+            soilMoisture: item.soilMoisture,
+            temperature: item.temperature,
+            timestamp: item.timestamp,
+          }));
+          const latestEntry = formattedData.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          )[0];
+          setCurrentData(latestEntry);
         } else {
-          setSensorData(null); // No data available
+          setCurrentData(null);
         }
       });
     };
 
     fetchData();
-  }, [selectedType]); // Re-fetch data when selectedType changes
+  }, []);
 
-  // List of options for FlatList (Temperature and Moisture)
-//   const TypeList = [
-//     { id: 'temperature', name: 'Temperature' },
-//     { id: 'moisture', name: 'Moisture' },
-//   ];
-
-  const maxValue = selectedType === 'temperature' ? 50 : 1023; // Set max value for temperature or moisture
-  const radius = 70; // Radius of the circle
-  const strokeWidth = 10; // Thickness of the progress circle
-  const circumference = 2 * Math.PI * radius; // Calculate the circle's circumference
-  const progress = sensorData !== null ? (sensorData / maxValue) * 100 : 0; // Progress percentage
+  const maxValue = selectedType === 'temperature' ? 50 : 1023;
+  const radius = 70;
+  const strokeWidth = 10;
+  const circumference = 2 * Math.PI * radius;
+  const value =
+    currentData !== null
+      ? selectedType === 'temperature'
+        ? currentData.temperature
+        : currentData.soilMoisture
+      : 0;
+  const progress = (value / maxValue) * 100;
 
   return (
     <View style={styles.container}>
-      {/* FlatList for Temperature and Moisture options */}
       <FlatList
         style={styles.typeList}
         horizontal
@@ -59,10 +65,8 @@ const SensorList = () => {
         )}
       />
 
-      {/* Circular Animation for Sensor Data */}
       <View style={styles.circularContainer}>
         <Svg width={200} height={200}>
-          {/* Background Circle */}
           <Circle
             cx="100"
             cy="100"
@@ -71,7 +75,6 @@ const SensorList = () => {
             strokeWidth={strokeWidth}
             fill="none"
           />
-          {/* Progress Circle */}
           <Circle
             cx="100"
             cy="100"
@@ -80,14 +83,11 @@ const SensorList = () => {
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={`${circumference}`}
-            strokeDashoffset={
-              circumference - (circumference * progress) / 100
-            } // Animate progress
+            strokeDashoffset={circumference - (circumference * progress) / 100}
             strokeLinecap="round"
             rotation="-90"
             origin="100, 100"
           />
-          {/* Text Inside the Circle */}
           <SvgText
             x="100"
             y="100"
@@ -96,25 +96,34 @@ const SensorList = () => {
             fontSize="20"
             fill="#000"
           >
-            {sensorData !== null
-              ? `${sensorData}${selectedType === 'temperature' ? '°C' : ''}`
+            {currentData !== null
+              ? `${value}${selectedType === 'temperature' ? '°C' : ''}`
               : 'N/A'}
           </SvgText>
         </Svg>
       </View>
 
-      {/* No data fallback */}
-      {sensorData === null && <Text style={styles.noDataText}>No data available</Text>}
+      {currentData && (
+        <Text style={styles.timestampText}>Timestamp: {currentData.timestamp}</Text>
+      )}
+
+      {currentData === null && <Text style={styles.noDataText}>No data available</Text>}
+
+      {/* Pass data to Recommendation component */}
+      {currentData && (
+        <Recommendation
+          temperature={currentData.temperature}
+          moisture={currentData.soilMoisture}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     padding: 20,
     marginTop: 20,
-    // backgroundColor: '#f5f5f5',
   },
   typeList: {
     marginBottom: 20,
@@ -126,7 +135,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white',
     borderRadius: 10,
-
   },
   selectedOption: {
     backgroundColor: Colors.PRIMARY,
@@ -135,6 +143,12 @@ const styles = StyleSheet.create({
   circularContainer: {
     alignItems: 'center',
     marginTop: 30,
+  },
+  timestampText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
   },
   noDataText: {
     textAlign: 'center',
