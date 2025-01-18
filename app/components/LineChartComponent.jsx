@@ -99,6 +99,18 @@ const LineChartComponent = ({ data, selectedDate }) => {
           bezier
         />
       </ScrollView>
+
+      {/* Legends Section */}
+      <View style={styles.legendContainer}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColorBox, { backgroundColor: 'rgba(0, 123, 255, 1)' }]} />
+          <Text style={styles.legendText}>Temperature</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColorBox, { backgroundColor: 'rgba(255, 99, 132, 1)' }]} />
+          <Text style={styles.legendText}>Soil Moisture</Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -117,6 +129,25 @@ const styles = StyleSheet.create({
   errorText: {
     textAlign: 'center',
     color: 'red',
+    fontSize: 16,
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  legendColorBox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+  },
+  legendText: {
+    marginLeft: 5,
     fontSize: 16,
   },
 });
